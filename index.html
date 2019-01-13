@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src="./src/Queue.js"></script>
+    <script src="./src/Stack.js"></script>
+    <script src="./src/LinkedList.js"></script>
 </head>
 <body>
 </body>
-<script src="./src/Stack.js"></script>
 <script>
+  // 使用栈检测括号是否成对出现
   function checkBrackets(str) {
     let stack = new Stack()
     let length = str.length
@@ -26,7 +29,52 @@
     }
     return stack.isEmpty()
   }
+  console.log('----检查括号是否成对------')
+  console.log('(ssssd)ssssss(', checkBrackets('(ssssd)ssssss('))
 
-  console.log(checkBrackets('(ssssd)ssssss('))
+  class QueueToStack {
+    constructor() {
+      this._queue1 = new Queue()
+      this._queue2 = new Queue()
+      this.currentQueue = this._queue1
+      this.backQueue = this._queue2
+    }
+
+    push(item) {
+      this.currentQueue.enqueue(item)
+    }
+    pop() {
+      let length = this.currentQueue.length
+      if (length === 0) {
+        return null
+      } else {
+        while(length > 1) {
+          this.backQueue.enqueue(this.currentQueue.dequeue())
+          --length
+        }
+        let temp = this.currentQueue
+        this.currentQueue = this.backQueue
+        this.backQueue = temp
+        temp = null
+        return this.backQueue.dequeue()
+      }
+    }
+  }
+
+  let queToStack = new QueueToStack()
+
+  console.log('-------队列转栈-------')
+  queToStack.push(1)
+  queToStack.push(2)
+  console.log(queToStack.pop())
+  console.log(queToStack.pop())
+  console.log(queToStack.pop())
+
+  let list = new LinkedList()
+  list.insertAtHead(1111)
+  list.insertAtHead(222)
+  list.insertAfter(1, 333)
+  list.deleteNodeAt(5)
+  console.log(list)
 </script>
 </html>
