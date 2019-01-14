@@ -1,112 +1,78 @@
+let length = Symbol('LinkedListLength')
 class LinkedListNode {
   constructor(data, next) {
     this.data = data
     this.next = next || null
   }
-  destory() {
-    this.data = null
-    this.next = null
-  }
 }
 
 class LinkedList {
   constructor() {
-    this.head = null
+    this[length] = 0
+    this.head = new LinkedListNode(null)
   }
 
-  insertAtHead(item) {
-    if (!this.head) {
-      this.head = new LinkedListNode(item)
-    } else {
-      this.head.next = new LinkedListNode(item, this.head.next)
-    }
+  insertAtHead(data) {
+    this.head.next = new LinkedListNode(data, this.head.next)
+    this[length]++
   }
 
-  insertAtEnd(item) {
-    if (!this.head) {
-      this.head = new LinkedListNode(item)
-    } else {
-      var lastItem = this.head
-      while(lastItem.next) {
-        lastItem = lastItem.next
-      }
-      lastItem.next = new LinkedListNode(item)
+  insertAtEnd(data) {
+    var lastNode = this.head
+    while (lastNode.next) {
+      lastNode = lastNode.next
     }
+    lastNode.next = new LinkedListNode(data)
+    this[length]++
   }
 
-  getLength() {
-    var length = 0
-    var currentNode = this.head
-    while(currentNode) {
-      ++length
-      currentNode = currentNode.next
+  findAt(index) {
+    if (isNaN(index)) {
+      throw new Error(`invalid index: ${index}`)
     }
-    return length
-  }
-
-  insertAfter(index, item) {
-    if (!this.head) {
-      throw new Error(`empty list, please add Node before insert`)            
-    }
-    if (isNaN(index) || index < 0) {
-      throw new Error(`invalid index: ${index}`)      
-    }
-    let targetNode = this.head
-    while(index > 0) {
-      targetNode = targetNode.next
-      if (!targetNode) {
-        throw new Error(`index exceeds linkedList length`)
-      }
+    let targeNode = this.head
+    while(index>=0 && targeNode) {
+      targeNode = targeNode.next
       index--
     }
-    targetNode.next = new LinkedListNode(item, targetNode.next)
+    return targeNode
   }
 
-  deleteNodeAt(index) {
-    if (!this.head) {
-      throw new Error(`empty list, please add Node before delete`)            
+  insertAfter(index, data) {
+    let targeNode = this.findAt(index)
+    if (!targeNode || targeNode === this.head) {
+      throw new Error(`can not find node at index(${index})`)
     }
-    if (isNaN(index) || index < 0) {
-      throw new Error(`invalid index: ${index}`)      
+    targeNode.next = new LinkedListNode(data, targeNode.next)
+    this[length]++
+  }
+
+  deleteAt(index) {
+    let prevNode = this.findAt(index - 1)
+    if (!prevNode || !prevNode.next) {
+      throw new Error(`can not find node at index(${index})`)
     }
-    if (index > (this.getLength() - 1)) {
-      throw new Error(`index exceeds linkedList length`)
-    }
-    if (index === 0) {
-      let nextNode = this.head.next
-      this.head.destory()
-      this.head = nextNode
-    } else {
-      let beforeNode = this.head
-      let beforeIndex = index - 1
-      while(beforeIndex > 0) {
-        beforeNode = beforeNode.next
-        --beforeIndex
+    prevNode.next = prevNode.next.next
+    this[length]--
+  }
+
+  indexOf(data) {
+    let index = -1
+    let currentNode = this.head.next
+    let find = false
+
+    while(currentNode) {
+      index++
+      if (currentNode.data === data) {
+        find = true
+        break
       }
-      let targetNode = beforeNode.next
-      let nextNode = targetNode.next
-      targetNode.destory()
-      beforeNode.next = nextNode
+      currentNode = currentNode.next
     }
+    return find ? index : undefined
   }
 
-  reverse() {
-    if (!this.head || !this.head.next) {
-      return
-    } else {
-      let currentNode = this.head 
-      do {
-        let nextNode = currentNode.next
-        let 
-        currentNode.next = nextNode.next
-        nextNode.next = currentNode
-        this.head = nextNode
-        currentNode.next = oldNode
-        this.head = currentNode
-        p
-
-      } while(currentNode)
-    }
+  getSize() {
+    return this[length]
   }
-
 }

@@ -71,10 +71,13 @@
   console.log(queToStack.pop())
 
   let list = new LinkedList()
-  list.insertAtHead(1111)
-  list.insertAtHead(222)
+  list.insertAtHead(111)
+  list.insertAtEnd(222)
   list.insertAfter(1, 333)
-  list.deleteNodeAt(5)
+  console.log(list.indexOf(333))
+  console.log(list.findAt(2))
+  list.deleteAt(0)
+  console.log(list.getSize())
   console.log(list)
 </script>
 </html>
